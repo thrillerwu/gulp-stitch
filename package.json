@@ -23,6 +23,7 @@
   "devDependencies": {
     "coveralls": "*",
     "event-stream": "*",
+    "gulp": "^3.8.7",
     "istanbul": "*",
     "mocha": "*",
     "mocha-lcov-reporter": "*",
