@@ -50,3 +50,4 @@
   return this.require.define;
 }).call(this)({"foo": function(exports, require, module) {module.exports = function () { return 'foo'; };
 }});
+require.modules = {'test_out':1};

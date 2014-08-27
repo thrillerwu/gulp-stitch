@@ -5,16 +5,18 @@ var through = require("through2"),
 
 var File = gutil.File;
 
-module.exports = function (fileName,opt) {
+module.exports = function (fileName,pathList,id) {
 	"use strict";
 
   if (!fileName) {
     throw new gutil.PluginError("gulp-stitch", "No fileName supplied");
   }
-  if (!opt) opt = [];
+  if (!pathList) pathList= [];
+  if (!id) id= 'require';
 
-  var filePathList=opt;
+  var filePathList=pathList;
   var firstFile = null;
+  var moduleList = [];
 
 	// see "Writing a plugin"
 	// https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/README.md
@@ -41,6 +43,8 @@ module.exports = function (fileName,opt) {
 
 
     if (!firstFile) firstFile = file;  
+    var f = file.relative.replace(/\.js$/,'');
+    moduleList.push("'"+f+"':1");
 		callback();
 
 	}
@@ -49,7 +53,8 @@ module.exports = function (fileName,opt) {
 
     if(firstFile) {
         var stitch_package = stitch.createPackage({
-          paths: filePathList
+          paths: filePathList,
+          identifier: id
         });
 
         var that = this;
@@ -61,9 +66,10 @@ module.exports = function (fileName,opt) {
              cwd: firstFile.cwd,
              base: firstFile.base,
              path: joinedPath,
-             contents: new Buffer(source),
              stat: firstFile.stat
           });
+          var list=id+'.modules = {'+moduleList.join(',\n')+'};\n';
+          file.contents=new Buffer(source+list);
           that.push(file);
           cb();
         });

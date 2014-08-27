@@ -18,6 +18,7 @@
   "dependencies": {
     "through2": "*",
     "gulp-util": "~2.2.0",
+    "gulp": "*",
     "stitch": "^0.3.3"
   },
   "devDependencies": {
